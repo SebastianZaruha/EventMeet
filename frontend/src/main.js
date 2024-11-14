@@ -1,8 +1,21 @@
-const fetchEvents = async () => {
-    const response = await fetch('http://localhost:3000/api/events');
-    const events = await response.json();
-    const eventsList = document.getElementById('events-list');
-    eventsList.innerHTML = events.map(event => `<p>${event.name} - ${event.date} en ${event.location}</p>`).join('');
-};
+const express = require('express');
+const cors = require('cors');
+const sequelize = require('./config/database');
+const eventRoutes = require('./routes/eventRoutes');
 
-fetchEvents();
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.use('/api/events', eventRoutes);
+
+const PORT = process.env.PORT || 3000;
+
+sequelize.sync()
+    .then(() => {
+        console.log('Base de datos sincronizada');
+        app.listen(PORT, () => {
+            console.log(`Servidor corriendo en http://localhost:${PORT}`);
+        });
+    })
+    .catch((error) => console.error('Error al conectar con la base de datos:', error));

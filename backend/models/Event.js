@@ -1,19 +1,12 @@
-const db = require('../config/database');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-class Event {
-  static async getAll() {
-    const result = await db.query('SELECT * FROM events');
-    return result.rows;
-  }
-
-  static async create(event) {
-    const { name, date, location } = event;
-    const result = await db.query(
-      'INSERT INTO events (name, date, location) VALUES ($1, $2, $3) RETURNING *',
-      [name, date, location]
-    );
-    return result.rows[0];
-  }
-}
+const Event = sequelize.define('Event', {
+  name: { type: DataTypes.STRING, allowNull: false },
+  description: { type: DataTypes.TEXT },
+  date: { type: DataTypes.DATE, allowNull: false },
+  tags: { type: DataTypes.ARRAY(DataTypes.STRING) },
+  attendeesCount: { type: DataTypes.INTEGER, defaultValue: 0 },
+});
 
 module.exports = Event;
