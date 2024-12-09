@@ -1,7 +1,13 @@
-import { Sequelize } from "sequelize";
+import { Sequelize } from "@sequelize/core";
+import { PostgresDialect } from "@sequelize/postgres";
 
-const connectDB = new Sequelize(
-  "postgres://postgres:jtRaVYfVpehvSZEpxnUdFdKjviXMbakZ@autorack.proxy.rlwy.net:14793/railway"
-);
-
-export default connectDB;
+const sequelize = new Sequelize({
+  dialect: PostgresDialect,
+  database: "EventMeet",
+  user: "postgres",
+  password: "1234",
+  host: "localhost",
+  port: 5432,
+  ssl: true,
+  clientMinMessages: "notice",
+});
