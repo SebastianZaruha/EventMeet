@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import {
-getUserEvent,
-getUserEvents,
+getUserEventCount,
+getUserEventsByUserId,
 updateUserEvent,
 postUserEvent,
 deleteUserEvent
@@ -9,10 +9,10 @@ deleteUserEvent
 
 const router = Router();
 
-router.get("/:id", getUserEvent);
-router.get("/", getUserEvents);
+router.get("/:eventId", getUserEventCount);
+router.get("/", getUserEventsByUserId);
 router.put("/:id", updateUserEvent);
 router.post("/", postUserEvent);
 router.delete("/:id", deleteUserEvent);
 
-export { router };
+export { router as userEventRouter };

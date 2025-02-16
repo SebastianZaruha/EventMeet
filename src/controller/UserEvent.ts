@@ -1,15 +1,21 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
+import { counterUserEvents, createUserEvent, findAllEventsByUserId } from "../services/UserEvent";
 
-const getUserEvent = (req: Request, res: Response) => {
+const getUserEventCount = async (req: Request, res: Response) => {
   try {
+    const eventId = req.params.id;
+    const count = await counterUserEvents(eventId);
+    res.status(200).send(count);
   } catch (e) {
     handleHttp(res, "ERROR_GET_USEREVENT");
   }
 };
 
-const getUserEvents = (req: Request, res: Response) => {
+const getUserEventsByUserId = async (req: Request, res: Response) => {
   try {
+    const userEvents = await findAllEventsByUserId(req.params.id);
+    res.status(200).send(userEvents);
   } catch (e) {
     handleHttp(res, "ERROR_GET_USEREVENTS");
   }
@@ -22,24 +28,32 @@ const updateUserEvent = (req: Request, res: Response) => {
   }
 };
 
-const postUserEvent = ({ body }: Request, res: Response) => {
+const postUserEvent = async (req: Request, res: Response) => {
   try {
-    res.send(body);
+    const { userId } = req.body;
+    const { eventId } = req.body;
+    const userEvent = await createUserEvent(userId, eventId);
+    res.status(201).send(userEvent);
+
   } catch (e) {
     handleHttp(res, "ERROR_POST_USEREVENT");
   }
 };
 
-const deleteUserEvent = (req: Request, res: Response) => {
+const deleteUserEvent = async (req: Request, res: Response) => {
   try {
+    const { userId } = req.body;
+    const { eventId } = req.body;
+    const userEvent = await deleteUserEvent(userId, eventId);
+    res.status(201).send(userEvent);    
   } catch (e) {
     handleHttp(res, "ERROR_DELETE_USEREVENT");
   }
 };
 
 export {
-  getUserEvent,
-  getUserEvents,
+  getUserEventCount,
+  getUserEventsByUserId,
   updateUserEvent,
   postUserEvent,
   deleteUserEvent,

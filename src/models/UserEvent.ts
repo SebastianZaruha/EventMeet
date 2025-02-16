@@ -27,7 +27,7 @@ const UserEventModel = conectDB.define("userEvent", {
   },
   pointsEarned: {
     type: DataTypes.INTEGER,
-    defaultValue: 0,
+    defaultValue: 10,
   },
 });
 
