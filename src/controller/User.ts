@@ -73,11 +73,11 @@ const loginUser = async (req: Request, res: Response) => {
       const isMatch = await passwordMatch(email, password);
       if (isMatch) {
         // Token Generado
-        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET || 'clave_privada_de_repuesto', {//esto da error, pero no sé bien por qué.
+        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET || 'clave_privada_de_repuesto', {//esto da error, pero no sé bien por qué.
           expiresIn: '1h' //Expiración
         });
 
-        res.status(200).json({ user, token });//devolución del token
+        res.status(200).json({ token });//devolución del token
       } else {
         res.status(400).json({ message: "Invalid data" });
       }
