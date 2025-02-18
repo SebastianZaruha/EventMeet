@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import { userRouter } from "./routes/User";
 import { companyRouter } from "./routes/Company";
 import { eventRouter } from "./routes/Event";
@@ -24,7 +25,7 @@ dotenv.config();
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-
+app.use(cors());
 app.use(express.json());
 // conectDB
 // .authenticate()
