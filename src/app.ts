@@ -54,6 +54,7 @@ app.use("/v1/user-events", userEventRouter);
 // Si necesitas sincronizar todos los modelos
 (async () => {
   try {
+    await conectDB.authenticate();
     await conectDB.sync({ alter : true }).then(() => {
       app
         .listen(PORT, () => {
