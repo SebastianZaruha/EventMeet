@@ -16,6 +16,10 @@ const CompanyModel = conectDB.define("companies", {
     unique: true,
     allowNull: false,
   },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   location: {
     type: DataTypes.STRING,
   },

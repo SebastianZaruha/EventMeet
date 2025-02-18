@@ -40,10 +40,21 @@ export const loginCompany = async (email: string) => {
     return company;
 }
 
+export const passwordMatch = async (email: string, password: string) => {
+    const company = await CompanyModel.findOne({
+      where: {
+        email,
+        password
+      }
+    }); 
+    return company;
+  }
+
 export default {
     findAllCompanies,
     saveCompany,
     findById,
     findByIdAndUpdate,
     loginCompany,
+    passwordMatch,
 };

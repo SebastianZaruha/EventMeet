@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
-import { findAllCompanies, findById, findByIdAndUpdate, loginCompany, saveCompany } from "../services/Company";
+import { findAllCompanies, findById, findByIdAndUpdate, loginCompany, passwordMatch, saveCompany } from "../services/Company";
+import jwt from "jsonwebtoken"
 
 const getCompanyById = (req: Request, res: Response) => {
   try {
@@ -44,18 +45,27 @@ const updateCompany = (req: Request, res: Response) => {
   }
 };
 
-const postLoginCompany = (req: Request, res: Response) => {
+const postLoginCompany = async (req: Request, res: Response) => {
   try {
-    const email = req.body.email;
-    loginCompany(email).then((company) => {
-      if (company) {
-        res.status(200).json(company);
+    const { email, password } = req.body;
+    const company: any = await loginCompany(email);
+    if (!company) {
+      res.status(404).json({ message: "User not found" });
+    } else {
+      const isMatch = await passwordMatch(email, password);
+      if (isMatch) {
+        // Token Generado
+        const token = jwt.sign({ id: company.id, email: company.email }, process.env.JWT_SECRET || 'clave_privada_de_repuesto', {//esto da error, pero no sé bien por qué.
+          expiresIn: '1h' //Expiración
+        });
+
+        res.status(200).json({ token });//devolución del token
       } else {
-        res.status(404).json({ message: "Company not Registered" });
+        res.status(400).json({ message: "Invalid data" });
       }
-    });
+    }   
   } catch (e) {
-    handleHttp(res, "ERROR_POST_COMPANY");
+    handleHttp(res, "ERROR_LOGIN_USER");
   }
 };
 
